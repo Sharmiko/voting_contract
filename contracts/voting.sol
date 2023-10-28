@@ -27,7 +27,7 @@ contract FruitVotingContract {
     }
 
     modifier OneVotePerAddress() {
-        require(!votedAddresses[msg.sender]);
+        require(!votedAddresses[msg.sender], "Cannot make more than 1 vote");
         _;
     }
 
