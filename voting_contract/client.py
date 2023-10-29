@@ -28,3 +28,6 @@ class FruitContractClient:
         })
 
         self.web3.eth.wait_for_transaction_receipt(tx_hash)
+
+    def get_winner(self) -> int:
+        return self.contract.functions.getWinner().call()
