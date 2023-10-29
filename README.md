@@ -16,6 +16,12 @@ solc contracts/voting.sol  --bin --abi --optimize -o ./
 
 
 #### Running tests
+You need to have `.env` file at project root and have set following env variables:
+```
+PUBLIC_ADDRESS = ""
+PRIVATE_ADDRESS = ""
+```
+
 Don't forget to export `PYTHONPATH`:
 ```
 export PYTHONPATH="${PYTHONPATH}:../"
