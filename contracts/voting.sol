@@ -7,6 +7,7 @@ contract FruitVotingContract {
 
     enum Fruit { APPLE, BANANA, WATERMELON, STRAWBERRY} 
 
+    address owner;
     uint256 public contractCreationTime;
     uint256 public constant votingDuration = 3 days;
     mapping(Fruit => uint256) public fruitVotes;
@@ -14,6 +15,7 @@ contract FruitVotingContract {
 
     constructor() {
         contractCreationTime = block.timestamp;
+        owner = msg.sender;
     }
 
     modifier isVotingTime() {
@@ -21,22 +23,31 @@ contract FruitVotingContract {
         _;
     }
 
-    modifier VotingEnded() {
+    modifier votingEnded() {
         require(block.timestamp > contractCreationTime + votingDuration, "Voting has not ended");
         _;
     }
 
-    modifier OneVotePerAddress() {
+    modifier oneVotePerAddress() {
         require(!votedAddresses[msg.sender], "Cannot make more than 1 vote");
         _;
     }
 
-    function voteForFruit(Fruit _fruit) public isVotingTime OneVotePerAddress {
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can perform this action");
+        _;
+    }
+
+    function setContractCreationTime(uint256 newTime) public onlyOwner {
+        contractCreationTime = newTime;
+    }
+
+    function voteForFruit(Fruit _fruit) public isVotingTime oneVotePerAddress {
         fruitVotes[_fruit] += 1;
         votedAddresses[msg.sender] = true;
     }
 
-    function getWinner() public VotingEnded view returns (Fruit) {
+    function getWinner() public votingEnded view returns (Fruit) {
         uint256 maxVote = 0;
         Fruit winningFruit;
 
