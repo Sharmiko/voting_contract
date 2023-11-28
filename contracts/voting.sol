@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity 0.8.21;
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract FruitVotingContract {
+contract FruitVotingContract is Ownable {
 
     enum Fruit { APPLE, BANANA, WATERMELON, STRAWBERRY} 
 
-    address owner;
     uint256 public contractCreationTime;
     uint256 public constant votingDuration = 3 days;
     mapping(Fruit => uint256) public fruitVotes;
     mapping(address => bool) public votedAddresses;
 
-    constructor() {
+    constructor(address initialOwner) Ownable(initialOwner) {
         contractCreationTime = block.timestamp;
-        owner = msg.sender;
     }
 
     modifier isVotingTime() {
@@ -30,11 +30,6 @@ contract FruitVotingContract {
 
     modifier oneVotePerAddress() {
         require(!votedAddresses[msg.sender], "Cannot make more than 1 vote");
-        _;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can perform this action");
         _;
     }
 
