@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 contract FruitVotingContract is Ownable {
 
-    enum Fruit { APPLE, BANANA, WATERMELON, STRAWBERRY} 
+    enum Fruit { NO_WINNER, APPLE, BANANA, WATERMELON, STRAWBERRY} 
 
     uint256 public contractCreationTime;
     uint256 public constant votingDuration = 3 days;
@@ -37,14 +37,14 @@ contract FruitVotingContract is Ownable {
         contractCreationTime = newTime;
     }
 
-    function voteForFruit(Fruit _fruit) public isVotingTime oneVotePerAddress {
-        fruitVotes[_fruit] += 1;
+    function voteForFruit(Fruit fruit) public isVotingTime oneVotePerAddress {
+        fruitVotes[fruit] += 1;
         votedAddresses[msg.sender] = true;
     }
 
     function getWinner() public votingEnded view returns (Fruit) {
         uint256 maxVote = 0;
-        Fruit winningFruit;
+        Fruit winningFruit = Fruit.NO_WINNER;
 
         for (uint8 i = 0; i < uint8(Fruit.STRAWBERRY) + 1; ++i) {
             Fruit _fruit = Fruit(i);

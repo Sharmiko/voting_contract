@@ -7,10 +7,11 @@ from brownie.exceptions import VirtualMachineError
 
 
 class Fruit(Enum):
-    APPLE = 0
-    BANANA = 1
-    WATERMELON = 2
-    STRAWBERRY = 3
+    NO_WINNER = 1
+    APPLE = 2
+    BANANA = 3
+    WATERMELON = 3
+    STRAWBERRY = 4
 
 
 @pytest.fixture
